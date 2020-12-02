@@ -9,7 +9,6 @@ import console.encoding.encoder.Algorithm;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.function.Function;
 
 /**
  *
@@ -38,12 +37,12 @@ public abstract class CaesarAlgorithm implements Algorithm {
 
     @Override
     public void encode(Reader in, Writer out) throws IOException {
-        apply(in, out, this::encrypt);
+        apply(in, out, this.key);
     }
 
     @Override
     public void decode(Reader in, Writer out) throws IOException {
-        apply(in, out, this::decipher);
+        apply(in, out, -this.key);
     }
 
     /**
@@ -56,20 +55,14 @@ public abstract class CaesarAlgorithm implements Algorithm {
     }
 
     /**
-     * Шифрует часть данных, помещённых в data.
+     * Шифрует/расшифровывает часть данных, помещённых в buffer
      *
-     * @param length число символов, которое необходимо зашифровать в буфере
-     * @return зашифрованная порция исходных данных
+     * @param length число символов, которое необходимо зашифровать/расшифровать
+     * в буфере
+     * @param key ключ, по которому происходит шифрование/расшифровывание
+     * @return зашифрованная/расшифрованная порция данных
      */
-    protected abstract char[] encrypt(int length);
-
-    /**
-     * Расшифровывает часть данных, помещённых в data.
-     *
-     * @param length число символов, которое необходимо расшифровать в буфере
-     * @return расшифрованная порция исходных данных
-     */
-    protected abstract char[] decipher(int length);
+    protected abstract char[] encrypt(int length, int key);
 
     /**
      * Основной цикл по разбиению и обработке исходных данных.
@@ -79,7 +72,7 @@ public abstract class CaesarAlgorithm implements Algorithm {
      * @param mode команда управления
      * @throws IOException если есть ошибки хотя бы в одном из потоков
      */
-    private void apply(Reader in, Writer out, Function<Integer, char[]> mode) throws IOException {
+    private void apply(Reader in, Writer out, int key) throws IOException {
         while (true) {
             clearBuffer();
             int length = in.read(this.buffer);
@@ -88,7 +81,7 @@ public abstract class CaesarAlgorithm implements Algorithm {
                 break;
             }
 
-            out.write(mode.apply(length));
+            out.write(encrypt(length, key));
             out.flush();
         }
     }

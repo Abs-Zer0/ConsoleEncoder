@@ -13,80 +13,45 @@ public class ShiftCaesarAlgorithm extends CaesarAlgorithm {
 
     private static final int a = (int) 'a';
     private static final int z = (int) 'z';
+    private static final int a_z = (int) 'z' - (int) 'a' + 1;
     private static final int A = (int) 'A';
     private static final int Z = (int) 'Z';
+    private static final int A_Z = (int) 'Z' - (int) 'A' + 1;
 
     public ShiftCaesarAlgorithm(int key) {
         super(key);
     }
 
     @Override
-    protected char[] encrypt(int length) {
+    protected char[] encrypt(int length, int key) {
         final char[] result = new char[length];
 
         for (int i = 0; i < length; i++) {
-            final char letter = this.buffer[i];
+            int letter = (int) this.buffer[i];
             if (isEnglishLowerLetter(letter)) {
-                int tmp = ((int) letter) + this.key;
+                letter += key;
 
-                if (tmp > z) {
-                    tmp = a + (tmp - z);
+                if (letter > z) {
+                    letter -= a_z;
                 }
-                if (tmp < a) {
-                    tmp = z - (a - tmp);
+                if (letter < a) {
+                    letter += a_z;
                 }
 
-                result[i] = (char) tmp;
+                result[i] = (char) letter;
             }
 
             if (isEnglishUpperLetter(letter)) {
-                int tmp = ((int) letter) + this.key;
+                letter += key;
 
-                if (tmp > Z) {
-                    tmp = A + (tmp - Z);
+                if (letter > Z) {
+                    letter -= A_Z;
                 }
-                if (tmp < A) {
-                    tmp = Z - (A - tmp);
-                }
-
-                result[i] = (char) tmp;
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    protected char[] decipher(int length) {
-        final int actualKey = -this.key;
-        final char[] result = new char[length];
-
-        for (int i = 0; i < length; i++) {
-            final char letter = this.buffer[i];
-            if (isEnglishLowerLetter(letter)) {
-                int tmp = ((int) letter) + actualKey;
-
-                if (tmp > z) {
-                    tmp = a + (tmp - z);
-                }
-                if (tmp < a) {
-                    tmp = z - (a - tmp);
+                if (letter < A) {
+                    letter += A_Z;
                 }
 
-                result[i] = (char) tmp;
-            }
-
-            if (isEnglishUpperLetter(letter)) {
-                int tmp = ((int) letter) + actualKey;
-
-                if (tmp > Z) {
-                    tmp = A + (tmp - Z);
-                }
-                if (tmp < A) {
-                    tmp = Z - (A - tmp);
-                }
-
-                result[i] = (char) tmp;
+                result[i] = (char) letter;
             }
         }
 
@@ -94,20 +59,24 @@ public class ShiftCaesarAlgorithm extends CaesarAlgorithm {
     }
 
     /**
-     * Проверка на принадлежность символа английскому алфавиту в нижнем регистре.
+     * Проверка на принадлежность символа английскому алфавиту в нижнем
+     * регистре.
+     *
      * @param letter символ для проверки
      * @return true - если символ английский и в нижнем регистре, инача - false
      */
-    private boolean isEnglishUpperLetter(char letter) {
+    private boolean isEnglishUpperLetter(int letter) {
         return letter >= a && letter <= z;
     }
 
     /**
-     * Проверка на принадлежность символа английскому алфавиту в верхнем регистре.
+     * Проверка на принадлежность символа английскому алфавиту в верхнем
+     * регистре.
+     *
      * @param letter символ для проверки
      * @return true - если символ английский и в верхнем регистре, инача - false
      */
-    private boolean isEnglishLowerLetter(char letter) {
+    private boolean isEnglishLowerLetter(int letter) {
         return letter >= A && letter <= Z;
     }
 }

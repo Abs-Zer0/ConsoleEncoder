@@ -28,6 +28,13 @@ public class Encoder {
     private Writer out = new OutputStreamWriter(System.out);
     private Algorithm alg = new ShiftCaesarAlgorithm(0);
 
+    /**
+     * Назначение источника данных из строки txt.
+     *
+     * @param txt строка для шифрования/расшифровывания
+     * @return Encoder с изменённым источником данных
+     * @throws NullPointerException если в качестве аргумента передаётся null
+     */
     public Encoder setInputData(String txt) throws NullPointerException {
         if (txt == null) {
             throw new NullPointerException("txt cannot be null");
@@ -38,6 +45,15 @@ public class Encoder {
         return this;
     }
 
+    /**
+     * Назначение источника данных из файла.
+     *
+     * @param inFile файл, содержащий текст для шифрования/расшифровывания
+     * @return Encoder с изменённым источником данных
+     * @throws NullPointerException если в качестве аргумента передаётся null
+     * @throws FileNotFoundException если файл, описанный в inFile, не
+     * существует
+     */
     public Encoder setInputData(File inFile) throws NullPointerException, FileNotFoundException {
         if (inFile == null) {
             throw new NullPointerException("txtFile cannot be null");
@@ -48,6 +64,14 @@ public class Encoder {
         return this;
     }
 
+    /**
+     * Назначение выхода данных в поток.
+     *
+     * @param outStream поток, в который будут записываться
+     * зашифрованные/расштфрованные данные
+     * @return Encoder с изменённым выходом данных
+     * @throws NullPointerException если в качестве аргумента передаётся null
+     */
     public Encoder setOutputData(OutputStream outStream) throws NullPointerException {
         if (outStream == null) {
             throw new NullPointerException("outStream cannot be null");
@@ -58,7 +82,16 @@ public class Encoder {
         return this;
     }
 
-    public Encoder setOutputData(File outFile) throws NullPointerException, FileNotFoundException, IOException {
+    /**
+     * Назначение выхода данных в файл.
+     *
+     * @param outFile файл, в который будут записываться
+     * зашифрованные/расштфрованные данные
+     * @return Encoder с изменённым выходом данных
+     * @throws NullPointerException если в качестве аргумента передаётся null
+     * @throws IOException если есть ошибки в описании файла
+     */
+    public Encoder setOutputData(File outFile) throws NullPointerException, IOException {
         if (outFile == null) {
             throw new NullPointerException("outFile cannot be null");
         }
@@ -69,6 +102,14 @@ public class Encoder {
         return this;
     }
 
+    /**
+     * Назначение алгоритма, по которому будут шифроваться/расшифровываться
+     * данные.
+     *
+     * @param alg алгоритм шифрования
+     * @return Encoder с изменённым алгоритмом шифрования
+     * @throws NullPointerException если в качестве аргумента передаётся null
+     */
     public Encoder setAlgorithm(Algorithm alg) throws NullPointerException {
         if (alg == null) {
             throw new NullPointerException("alg cannot be null");
@@ -79,12 +120,47 @@ public class Encoder {
         return this;
     }
 
+    /**
+     * Возвращение алгоритма шифрования для изменения его параметров
+     *
+     * @return алгоритм шифрования
+     */
+    public Algorithm getAlgorithm() {
+        return this.alg;
+    }
+
+    /**
+     * Установка стандартных настроек: источник данных = "", выход данных =
+     * System.out, алгоритм шифрования = shift.
+     *
+     * @return стандартный Encoder
+     */
+    public Encoder setDefaultComponents() {
+        this.in = new StringReader("");
+        this.out = new OutputStreamWriter(System.out);
+        this.alg = new ShiftCaesarAlgorithm(0);
+
+        return this;
+    }
+
+    /**
+     * Функция шифрования данных.
+     *
+     * @return поток, в котором уже записаны зашифрованные данные
+     * @throws IOException если есть ошибки хотя бы в одном из потоков
+     */
     public Writer encode() throws IOException {
         this.alg.encode(in, out);
 
         return out;
     }
 
+    /**
+     * Функция расшифровывания данных.
+     *
+     * @return поток, в котором уже записаны расшифрованные данные
+     * @throws IOException елси есть ошибки хотя бы в одном из потоков
+     */
     public Writer decode() throws IOException {
         this.alg.decode(in, out);
 
