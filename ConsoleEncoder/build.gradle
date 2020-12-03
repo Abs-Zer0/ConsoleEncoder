@@ -8,8 +8,37 @@ mainClassName = 'console.encoding.Main'
 
 repositories {
     jcenter()
+    mavenCentral()
 }
 
 dependencies {
     testImplementation     'junit:junit:4.13'
+    implementation 'commons-cli:commons-cli:1.4'
+}
+
+/*Build .jar plugin*/
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+shadowJar {
+   archiveBaseName.set('shadow')
+   archiveClassifier.set('')
+   archiveVersion.set('')
+   manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
 }

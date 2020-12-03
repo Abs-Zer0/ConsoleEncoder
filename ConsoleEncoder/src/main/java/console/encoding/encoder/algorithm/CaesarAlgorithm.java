@@ -77,7 +77,7 @@ public abstract class CaesarAlgorithm implements Algorithm {
             clearBuffer();
             int length = in.read(this.buffer);
 
-            if (length == 0) {
+            if (length <= 0) {
                 break;
             }
 

@@ -13,10 +13,10 @@ public class ShiftCaesarAlgorithm extends CaesarAlgorithm {
 
     private static final int a = (int) 'a';
     private static final int z = (int) 'z';
-    private static final int a_z = (int) 'z' - (int) 'a' + 1;
+    private static final int a_z = ((int) 'z' - (int) 'a') + 1;
     private static final int A = (int) 'A';
     private static final int Z = (int) 'Z';
-    private static final int A_Z = (int) 'Z' - (int) 'A' + 1;
+    private static final int A_Z = ((int) 'Z' - (int) 'A') + 1;
 
     public ShiftCaesarAlgorithm(int key) {
         super(key);
@@ -37,8 +37,6 @@ public class ShiftCaesarAlgorithm extends CaesarAlgorithm {
                 if (letter < a) {
                     letter += a_z;
                 }
-
-                result[i] = (char) letter;
             }
 
             if (isEnglishUpperLetter(letter)) {
@@ -50,9 +48,9 @@ public class ShiftCaesarAlgorithm extends CaesarAlgorithm {
                 if (letter < A) {
                     letter += A_Z;
                 }
-
-                result[i] = (char) letter;
             }
+            
+            result[i] = (char) letter;
         }
 
         return result;
@@ -65,7 +63,7 @@ public class ShiftCaesarAlgorithm extends CaesarAlgorithm {
      * @param letter символ для проверки
      * @return true - если символ английский и в нижнем регистре, инача - false
      */
-    private boolean isEnglishUpperLetter(int letter) {
+    private boolean isEnglishLowerLetter(int letter) {
         return letter >= a && letter <= z;
     }
 
@@ -76,7 +74,7 @@ public class ShiftCaesarAlgorithm extends CaesarAlgorithm {
      * @param letter символ для проверки
      * @return true - если символ английский и в верхнем регистре, инача - false
      */
-    private boolean isEnglishLowerLetter(int letter) {
+    private boolean isEnglishUpperLetter(int letter) {
         return letter >= A && letter <= Z;
     }
 }

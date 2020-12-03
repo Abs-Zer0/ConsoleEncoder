@@ -6,6 +6,7 @@
 package console.encoding.encoder;
 
 import console.encoding.encoder.algorithm.ShiftCaesarAlgorithm;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,7 +23,7 @@ import java.io.Writer;
  *
  * @author Абс0лютный Н0ль
  */
-public class Encoder {
+public class Encoder implements Closeable {
 
     private Reader in = new StringReader("");
     private Writer out = new OutputStreamWriter(System.out);
@@ -165,5 +166,10 @@ public class Encoder {
         this.alg.decode(in, out);
 
         return out;
+    }
+
+    @Override
+    public void close() throws IOException {
+        this.in.close();
     }
 }
